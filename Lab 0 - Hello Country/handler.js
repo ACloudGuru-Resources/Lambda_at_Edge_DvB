@@ -39,9 +39,22 @@ exports.handler = (event, context, callback) => {
         <head>
             <meta charset="utf-8">
             <title>ACG Lambda@Edge: Hello Country!</title>
+            <style>
+              body {
+                background-color: #6d9eebff;
+                font-family: Verdana;
+                padding-top: 15%;
+                font-size: 4vw;
+                text-align: center;
+                color: #0f2548;
+              }
+              strong {
+                color: #ebebeb;
+              }
+            </style>
         </head>
         <body>
-            <h1>Hello ${countryCode} from Lambda@Edge!</h1>
+            <h1>Hello <strong>${countryCode}</strong> from Lambda@Edge!</h1>
         </body>
         </html>
       `,
