@@ -7,12 +7,13 @@ array.reduce((obj, item) => {
   return obj
 }, {});
 
+/* This is an viewer request function */
 exports.handler = (event, context, callback) => {
     const request = event.Records[0].cf.request;
     const headers = request.headers;
     const cookiesObj = cookiesToObject(headers.cookie);
 
-    if (request.uri !== '/experiment.jpg') {
+    if (request.uri !== '/experiment.gif') {
         // do not process if this is not an A-B test request
         callback(null, request);
         return;
@@ -20,8 +21,8 @@ exports.handler = (event, context, callback) => {
 
     const cookieExperimentA = 'X-Experiment-Name=A';
     const cookieExperimentB = 'X-Experiment-Name=B';
-    const pathExperimentA = '/experiment-group/control.jpg';
-    const pathExperimentB = '/experiment-group/treatment.jpg';
+    const pathExperimentA = '/a-control.gif';
+    const pathExperimentB = '/b-treatment.gif';
   
     let experimentUri;
     if (headers.cookie) {
