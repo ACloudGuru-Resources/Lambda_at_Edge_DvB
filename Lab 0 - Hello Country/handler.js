@@ -5,15 +5,25 @@ exports.handler = (event, context, callback) => {
   const request = event.Records[0].cf.request;
   const headers = request.headers;
 
+  console.log('request', request);
+
   if (
     headers['cloudfront-viewer-country'] &&
     headers['cloudfront-viewer-country'][0].value
   ) {
     const countryCode = headers['cloudfront-viewer-country'][0].value;
+    console.log('countryCode', countryCode);
+
     const response = {
       status: '200',
       statusDescription: 'OK',
       headers: {
+        'cloudfront-viewer-country': [
+          {
+            key: 'CloudFront-Viewer-Country',
+            value: countryCode,
+          },
+        ],
         'cache-control': [
           {
             key: 'Cache-Control',
