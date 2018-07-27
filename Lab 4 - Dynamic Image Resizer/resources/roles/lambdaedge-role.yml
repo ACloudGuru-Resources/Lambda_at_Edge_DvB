@@ -1,0 +1,25 @@
+---
+  Type: AWS::IAM::Role
+  Properties:
+    Path: /
+    RoleName: ${self:custom.stackname}-lambaedge-role
+    AssumeRolePolicyDocument:
+      Version: "2012-10-17"
+      Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+              - lambda.amazonaws.com
+              - edgelambda.amazonaws.com
+          Action: sts:AssumeRole
+    Policies:
+      - PolicyName: ${self:custom.stackname}-lambaedge-policy
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+              Resource: "arn:aws:logs:*:*:*"

@@ -1,0 +1,108 @@
+service: acg-image-resizer
+
+frameworkVersion: ">=1.9.0 <2.0.0"
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  stackname: ${self:service}-${self:custom.stage}
+  stages:
+    dev: dev
+    prod: prod
+  stageFlag: ${self:custom.stages.${self:custom.stage}, "dev"}
+
+provider:
+  name: aws
+  region: us-east-1
+  runtime: nodejs8.10
+
+functions:
+  viewerRequest:
+    name: ${self:custom.stackname}-viewerRequest
+    handler: functions/viewerRequest/viewerRequest.handler
+    memorySize: 128
+    timeout: 5
+    role: LambdaEdgeRole
+    lambdaAtEdge:
+      distribution: WebsiteDistribution
+      eventType: viewer-request
+    package:
+      include:
+        - functions/viewerRequest/**/*
+
+resources:
+  Description: ACG Image Resizer
+  
+  Resources:
+    LambdaEdgeRole: ${file(resources/roles/lambdaedge-role.yml)}
+    
+    CloudfrontOAI:
+      Type: "AWS::CloudFront::CloudFrontOriginAccessIdentity"
+      Properties:
+        CloudFrontOriginAccessIdentityConfig:
+          Comment: Created for ${self:custom.stackname} 
+    DefaultBucket:
+      Type: "AWS::S3::Bucket"
+      Properties:
+        AccessControl: Private
+        # AccelerateConfiguration:
+    BucketPolicy:
+      Type: "AWS::S3::BucketPolicy"
+      Properties:
+        Bucket: {Ref: DefaultBucket}
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            Effect: Allow
+            Principal:
+              CanonicalUser:
+                - {"Fn::GetAtt": [CloudfrontOAI, S3CanonicalUserId]}
+            Action:
+              - s3:ListBucket
+              - s3:GetObject
+            Resource:
+              - {"Fn::Join": ["", ["arn:aws:s3:::", {Ref: DefaultBucket}]]}
+              - {"Fn::Join": ["", ["arn:aws:s3:::", {Ref: DefaultBucket}, "/*"]]}
+    WebsiteDistribution:
+      Type: "AWS::CloudFront::Distribution"
+      Properties:
+        DistributionConfig:
+          ViewerCertificate:
+            CloudFrontDefaultCertificate: true
+          Enabled: true
+          HttpVersion: http2
+          PriceClass: PriceClass_100
+          IPV6Enabled: true
+          DefaultCacheBehavior:
+            AllowedMethods:
+              - GET
+              - HEAD
+            CachedMethods:
+              - GET
+              - HEAD
+            Compress: true
+            ForwardedValues:
+              QueryString: false
+              Cookies:
+                Forward: none
+            DefaultTTL: 0
+            MaxTTL: 0
+            MinTTL: 0
+            # PathPattern: String
+            # SmoothStreaming: Boolean
+            TargetOriginId: WebsiteBucketOrigin
+            # TrustedSigners:
+            #   - String
+            ViewerProtocolPolicy: redirect-to-https
+          Origins:
+            - DomainName: {"Fn::GetAtt": [DefaultBucket, DomainName]}
+              Id: WebsiteBucketOrigin
+              S3OriginConfig:
+                OriginAccessIdentity: {"Fn::Join": ["", ["origin-access-identity/cloudfront/", {Ref: CloudfrontOAI}]]}
+
+plugins:
+  - serverless-plugin-cloudfront-lambda-edge
+
+package:
+  individually: true
+  exclude:
+    - '**/*'
