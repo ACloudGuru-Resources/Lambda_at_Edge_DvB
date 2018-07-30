@@ -247,10 +247,6 @@ circular-json@^0.3.1:
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/circular-json/-/circular-json-0.3.3.tgz#815c99ea84f6809529d2f45791bdf82711352d66"
 
-class.extend@0.9.2:
-  version "0.9.2"
-  resolved "https://registry.yarnpkg.com/class.extend/-/class.extend-0.9.2.tgz#e1cbda3697cb31d3cdab1c001d269075c9031f78"
-
 cli-cursor@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/cli-cursor/-/cli-cursor-2.1.0.tgz#b35dac376479facc3e94747d41d0d0f5238ffcb5"
@@ -1112,13 +1108,6 @@ semver@5.5.0, semver@^5.3.0, semver@^5.5.0:
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.5.0.tgz#dc4bbc7a6ca9d916dee5d43516f0092b58f7b8ab"
 
-serverless-plugin-cloudfront-lambda-edge@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/serverless-plugin-cloudfront-lambda-edge/-/serverless-plugin-cloudfront-lambda-edge-2.0.0.tgz#bb99e338af470da5372e6db304b5e57b3d7994c4"
-  dependencies:
-    class.extend "0.9.2"
-    underscore "1.8.3"
-
 shebang-command@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/shebang-command/-/shebang-command-1.2.0.tgz#44aac65b695b03398968c39f363fee5deafdf1ea"
@@ -1264,10 +1253,6 @@ typescript-eslint-parser@^16.0.0:
 typescript@^2.5.1:
   version "2.9.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.9.2.tgz#1cbf61d05d6b96269244eb6a3bce4bd914e0f00c"
-
-underscore@1.8.3:
-  version "1.8.3"
-  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.8.3.tgz#4f3fb53b106e6097fcf9cb4109f2a5e9bdfa5022"
 
 uri-js@^4.2.1:
   version "4.2.2"

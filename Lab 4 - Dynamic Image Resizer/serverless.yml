@@ -25,9 +25,23 @@ functions:
     lambdaAtEdge:
       distribution: WebsiteDistribution
       eventType: viewer-request
+      deletionPolicy: Retain
     package:
       include:
         - functions/viewerRequest/**/*
+  originResponse:
+    name: ${self:custom.stackname}-originResponse
+    handler: functions/originResponse/originResponse.handler
+    memorySize: 128
+    timeout: 5
+    role: LambdaEdgeRole
+    lambdaAtEdge:
+      distribution: WebsiteDistribution
+      eventType: origin-response
+      deletionPolicy: Retain
+    package:
+      include:
+        - functions/originResponse/**/*
 
 resources:
   Description: ACG Image Resizer
@@ -81,14 +95,16 @@ resources:
               - HEAD
             Compress: true
             ForwardedValues:
-              QueryString: false
+              QueryString: true
+              QueryStringCacheKeys:
+                - d
               Cookies:
                 Forward: none
             DefaultTTL: 0
             MaxTTL: 0
-            MinTTL: 0
+            MinTTL: 100
             # PathPattern: String
-            # SmoothStreaming: Boolean
+            SmoothStreaming: false
             TargetOriginId: WebsiteBucketOrigin
             # TrustedSigners:
             #   - String

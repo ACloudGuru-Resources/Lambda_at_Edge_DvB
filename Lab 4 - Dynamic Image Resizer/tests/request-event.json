@@ -1,0 +1,108 @@
+{
+  "Records": [
+    {
+      "cf": {
+        "config": {
+          "distributionDomainName": "d26tj7n5znmbt4.cloudfront.net",
+          "distributionId": "EL5V31L8OTQN6",
+          "eventType": "origin-response"
+        },
+        "request": {
+          "clientIp": "174.117.5.60",
+          "headers": {
+            "accept-encoding": [
+              {
+                "key": "Accept-Encoding",
+                "value": "gzip"
+              }
+            ],
+            "host": [
+              {
+                "key": "Host",
+                "value": "acg-image-resizer-dev-defaultbucket-9asofmuec79b.s3.amazonaws.com"
+              }
+            ],
+            "upgrade-insecure-requests": [
+              {
+                "key": "upgrade-insecure-requests",
+                "value": "1"
+              }
+            ],
+            "user-agent": [
+              {
+                "key": "User-Agent",
+                "value": "Amazon CloudFront"
+              }
+            ],
+            "via": [
+              {
+                "key": "Via",
+                "value": "1.1 26f1bc2c2c16a6c920dbd65a72798c19.cloudfront.net (CloudFront)"
+              }
+            ],
+            "x-forwarded-for": [
+              {
+                "key": "X-Forwarded-For",
+                "value": "174.117.5.60"
+              }
+            ]
+          },
+          "method": "GET",
+          "origin": {
+            "s3": {
+              "authMethod": "origin-access-identity",
+              "customHeaders": {},
+              "domainName": "acg-image-resizer-dev-defaultbucket-9asofmuec79b.s3.amazonaws.com",
+              "path": "",
+              "region": "us-east-1"
+            }
+          },
+          "querystring": "d=400x400",
+          "uri": "/images/400x400/webp/lake.jpg"
+        },
+        "response": {
+          "headers": {
+            "content-type": [
+              {
+                "key": "Content-Type",
+                "value": "application/xml"
+              }
+            ],
+            "date": [
+              {
+                "key": "Date",
+                "value": "Sun, 29 Jul 2018 19:57:21 GMT"
+              }
+            ],
+            "server": [
+              {
+                "key": "Server",
+                "value": "AmazonS3"
+              }
+            ],
+            "transfer-encoding": [
+              {
+                "key": "Transfer-Encoding",
+                "value": "chunked"
+              }
+            ],
+            "x-amz-id-2": [
+              {
+                "key": "x-amz-id-2",
+                "value": "4eLS9uk9Fe949Yl/SNw+fIN9mV8Bqv5ei6KgLjThn6Pt1zoK8CInt6/imq9X+hp2w4XZe/GEP5g="
+              }
+            ],
+            "x-amz-request-id": [
+              {
+                "key": "x-amz-request-id",
+                "value": "CDE344F2CDF568C8"
+              }
+            ]
+          },
+          "status": "404",
+          "statusDescription": "Not Found"
+        }
+      }
+    }
+  ]
+}
