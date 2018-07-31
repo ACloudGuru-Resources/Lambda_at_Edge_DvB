@@ -9,6 +9,7 @@ custom:
     dev: dev
     prod: prod
   stageFlag: ${self:custom.stages.${self:custom.stage}, "dev"}
+  secrets: ${file(secrets.yml):secrets}
 
 provider:
   name: aws
@@ -66,16 +67,27 @@ resources:
         PolicyDocument:
           Version: "2012-10-17"
           Statement:
-            Effect: Allow
-            Principal:
-              CanonicalUser:
-                - {"Fn::GetAtt": [CloudfrontOAI, S3CanonicalUserId]}
-            Action:
-              - s3:ListBucket
-              - s3:GetObject
-            Resource:
-              - {"Fn::Join": ["", ["arn:aws:s3:::", {Ref: DefaultBucket}]]}
-              - {"Fn::Join": ["", ["arn:aws:s3:::", {Ref: DefaultBucket}, "/*"]]}
+            - Effect: Allow
+              Principal:
+                CanonicalUser:
+                  - {"Fn::GetAtt": [CloudfrontOAI, S3CanonicalUserId]}
+              Action:
+                - s3:ListBucket
+                - s3:GetObject
+              Resource:
+                - {"Fn::Join": ["", ["arn:aws:s3:::", {Ref: DefaultBucket}]]}
+                - {"Fn::Join": ["", ["arn:aws:s3:::", {Ref: DefaultBucket}, "/*"]]}
+            - Effect: Allow
+              Principal: "*"
+              Action:
+                - s3:ListBucket
+                - s3:GetObject
+              Resource:
+                - {"Fn::Join": ["", ["arn:aws:s3:::", {Ref: DefaultBucket}]]}
+                - {"Fn::Join": ["", ["arn:aws:s3:::", {Ref: DefaultBucket}, "/*"]]}
+              Condition:
+                IpAddress: 
+                  aws:SourceIp: ${self:custom.secrets.homeIP}
     WebsiteDistribution:
       Type: "AWS::CloudFront::Distribution"
       Properties:
@@ -101,8 +113,8 @@ resources:
               Cookies:
                 Forward: none
             DefaultTTL: 0
-            MaxTTL: 0
-            MinTTL: 100
+            MaxTTL: 100
+            MinTTL: 0
             # PathPattern: String
             SmoothStreaming: false
             TargetOriginId: WebsiteBucketOrigin

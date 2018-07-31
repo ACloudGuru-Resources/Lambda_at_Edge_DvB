@@ -9,6 +9,7 @@ const S3 = new AWS.S3({
   signatureVersion: 'v4',
 });
 const Sharp = require('sharp');
+const prettyjson = require('prettyjson');
 
 // set the S3 and API GW endpoints
 const BUCKET = 'acg-image-resizer-dev-defaultbucket-9asofmuec79b';
@@ -16,7 +17,7 @@ const BUCKET = 'acg-image-resizer-dev-defaultbucket-9asofmuec79b';
 exports.handler = (event, context, callback) => {
   let response = event.Records[0].cf.response;
   let request = event.Records[0].cf.request;
-  console.log('event', JSON.stringify(event));
+  console.log(prettyjson.render(event, { noColor: true }));
 
   //check if image is not present
   if (response.status == 404) {
