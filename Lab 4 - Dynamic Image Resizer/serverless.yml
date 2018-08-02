@@ -10,6 +10,8 @@ custom:
     prod: prod
   stageFlag: ${self:custom.stages.${self:custom.stage}, "dev"}
   secrets: ${file(secrets.yml):secrets}
+  lambdaAtEdge:
+    retain: true
 
 provider:
   name: aws
@@ -17,19 +19,19 @@ provider:
   runtime: nodejs8.10
 
 functions:
-  viewerRequest:
-    name: ${self:custom.stackname}-viewerRequest
-    handler: functions/viewerRequest/viewerRequest.handler
-    memorySize: 128
-    timeout: 5
-    role: LambdaEdgeRole
-    lambdaAtEdge:
-      distribution: WebsiteDistribution
-      eventType: viewer-request
-      deletionPolicy: Retain
-    package:
-      include:
-        - functions/viewerRequest/**/*
+  # viewerRequest:
+  #   name: ${self:custom.stackname}-viewerRequest
+  #   handler: functions/viewerRequest/viewerRequest.handler
+  #   memorySize: 128
+  #   timeout: 5
+  #   role: LambdaEdgeRole
+  #   lambdaAtEdge:
+  #     distribution: WebsiteDistribution
+  #     eventType: viewer-request
+  #     deletionPolicy: Retain
+  #   package:
+  #     include:
+  #       - functions/viewerRequest/**/*
   originResponse:
     name: ${self:custom.stackname}-originResponse
     handler: functions/originResponse/originResponse.handler
@@ -107,9 +109,7 @@ resources:
               - HEAD
             Compress: true
             ForwardedValues:
-              QueryString: true
-              QueryStringCacheKeys:
-                - d
+              QueryString: false
               Cookies:
                 Forward: none
             DefaultTTL: 0
