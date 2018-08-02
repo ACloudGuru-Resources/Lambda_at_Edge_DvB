@@ -1,14 +1,14 @@
 'use strict';
+const prettyjson = require('prettyjson');
 
 const experimentTraffic = 0.5;
 
-/* This is an viewer request function */
 exports.handler = (event, context, callback) => {
+  console.log(prettyjson.render(event, {noColor: true}));
   const request = event.Records[0].cf.request;
   const headers = request.headers;
-  console.log('headers', headers);
   const cookies = cookiesToObject(headers.cookie);
-  console.log('cookies', cookies);
+  console.log(prettyjson.render(cookies, {noColor: true}));
 
   if (request.uri !== '/experiment.gif' || cookies['X-Experiment-Name']) {
     // do not process if this is not an A-B test request
