@@ -1,9 +1,7 @@
 'use strict';
 
-const prettyjson = require('prettyjson');
-
 exports.handler = (event, context, callback) => {
-  console.log(prettyjson.render(event, {noColor: true}));
+  console.log('event', event);
   
   const request = event.Records[0].cf.request;
   const headers = request.headers;

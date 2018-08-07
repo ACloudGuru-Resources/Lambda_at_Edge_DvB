@@ -1,9 +1,7 @@
 'use strict';
 
-const prettyjson = require('prettyjson');
-
 exports.handler = (event, context, callback) => {
-  console.log(prettyjson.render(event, {noColor: true}));
+  console.log('event', event);
 
   const request = event.Records[0].cf.request;
   const headers = request.headers;
@@ -11,7 +9,7 @@ exports.handler = (event, context, callback) => {
   const cookies = cookiesToObject(headers.cookie);
   const experimentLetter = cookies['X-Experiment-Name'];
 
-  if (!cookies['X-Experiment-Name']) {
+  if (!experimentLetter) {
     // do not process if this is not an A-B test request
     callback(null, response);
     return;
