@@ -58,7 +58,7 @@
             }
           },
           "querystring": "d=400x400",
-          "uri": "/images/400x400/webp/lake.jpg"
+          "uri": "/images/w_400,h_450,greyscale/lake.jpg"
         },
         "response": {
           "headers": {

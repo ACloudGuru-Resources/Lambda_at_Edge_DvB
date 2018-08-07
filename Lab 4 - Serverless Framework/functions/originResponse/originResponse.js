@@ -1,9 +1,5 @@
 'use strict';
 
-const http = require('http');
-const https = require('https');
-const querystring = require('querystring');
-
 const AWS = require('aws-sdk');
 const S3 = new AWS.S3({
   signatureVersion: 'v4',
@@ -14,6 +10,8 @@ const prettyjson = require('prettyjson');
 // set the S3 and API GW endpoints
 const BUCKET = 'acg-image-resizer-dev-defaultbucket-9asofmuec79b';
 
+const URI_REGEX = /^\/(?:(.*\/)?)((?:[wh]_\d{2,4})(?:,[wh]_\d{2,4})*(?:,greyscale)?)\/((.*).(\w{3,4}))$/;
+
 exports.handler = (event, context, callback) => {
   let response = event.Records[0].cf.response;
   let request = event.Records[0].cf.request;
@@ -21,51 +19,17 @@ exports.handler = (event, context, callback) => {
 
   //check if image is not present
   if (response.status == 404) {
-    let params = querystring.parse(request.querystring);
-    console.log('params', params);
-    // if there is no dimension attribute, just pass the response
-    if (!params.d) {
-      callback(null, response);
-      return;
-    }
-
-    // read the dimension parameter value = width x height and split it by 'x'
-    let dimensionMatch = params.d.split('x');
-    console.log('dimensionMatch', dimensionMatch);
-    // read the required path. Ex: uri /images/100x100/webp/image.jpg
-    let path = request.uri;
-
-    // read the S3 key from the path variable.
-    // Ex: path variable /images/100x100/webp/image.jpg
-    let key = path.substring(1);
-
-    // parse the prefix, width, height and image name
-    // Ex: key=images/200x200/webp/image.jpg
-    let prefix, originalKey, match, width, height, requiredFormat, imageName;
-    let startIndex;
-
-    try {
-      match = key.match(/(.*)\/(\d+)x(\d+)\/(.*)\/(.*)/);
-      prefix = match[1];
-      width = parseInt(match[2], 10);
-      height = parseInt(match[3], 10);
-
-      // correction for jpg required for 'Sharp'
-      requiredFormat = match[4] == 'jpg' ? 'jpeg' : match[4];
-      imageName = match[5];
-      originalKey = prefix + '/' + imageName;
-    } catch (err) {
-      // no prefix exist for image..
-      console.log('no prefix present..');
-      match = key.match(/(\d+)x(\d+)\/(.*)\/(.*)/);
-      width = parseInt(match[1], 10);
-      height = parseInt(match[2], 10);
-
-      // correction for jpg required for 'Sharp'
-      requiredFormat = match[3] == 'jpg' ? 'jpeg' : match[3];
-      imageName = match[4];
-      originalKey = imageName;
-    }
+    const path = request.uri, // Ex: uri /images/w_100,h_100,greyscale/image.jpg
+      match = path.match(URI_REGEX), // /(.*)\/(\d+)x(\d+)\/(.*)\/(.*)/
+      key = match[0].substring(1),
+      prefix = match[1],
+      transforms = match[2].split(','),
+      width = parseInt(transforms[0].substring(2), 10),
+      height = parseInt(transforms[1].substring(2), 10),
+      greyscale = transforms.indexOf('greyscale') >= 0,
+      requiredFormat = match[5] == 'jpg' ? 'jpeg' : match[4],
+      imageName = match[3],
+      originalKey = prefix + imageName;
 
     // get the source image file
     S3.getObject({ Bucket: BUCKET, Key: originalKey })
@@ -75,6 +39,7 @@ exports.handler = (event, context, callback) => {
         Sharp(data.Body)
           .resize(width, height)
           .toFormat(requiredFormat)
+          .greyscale(greyscale)
           .toBuffer(),
       )
       .then(buffer => {

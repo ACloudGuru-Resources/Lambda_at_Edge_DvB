@@ -2,11 +2,10 @@
 
 const experimentTraffic = 0.5;
 
-/* This is an viewer request function */
 exports.handler = (event, context, callback) => {
+  console.log('event', event);
   const request = event.Records[0].cf.request;
   const headers = request.headers;
-  console.log('headers', headers);
   const cookies = cookiesToObject(headers.cookie);
   console.log('cookies', cookies);
 

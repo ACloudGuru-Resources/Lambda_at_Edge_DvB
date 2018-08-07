@@ -1,28 +1,23 @@
 'use strict';
 
-/* This is an origin request function */
 exports.handler = (event, context, callback) => {
+  console.log('event', event);
+
   const request = event.Records[0].cf.request;
   const headers = request.headers;
-
   const response = event.Records[0].cf.response;
-
-  console.log('headers', headers);
   const cookies = cookiesToObject(headers.cookie);
-  console.log('cookies', cookies);
+  const experimentLetter = cookies['X-Experiment-Name'];
 
-  headers.cookie = headers.cookie || [];
-  if (headers.cookie && response) {
-    if (cookies['X-Experiment-Name'] === 'A') {
-      console.log('Experiment A cookie found');
-      console.log(`Adding cookie header: X-Experiment-Name=A`);
-      setCookie(response, 'X-Experiment-Name=A');
-    } else if (cookies['X-Experiment-Name'] === 'B') {
-      console.log('Experiment B cookie found');
-      console.log(`Adding cookie header: X-Experiment-Name=B`);
-      setCookie(response, 'X-Experiment-Name=B');
-    }
+  if (!experimentLetter) {
+    // do not process if this is not an A-B test request
+    callback(null, response);
+    return;
   }
+
+  console.log(`Experiment ${experimentLetter} cookie found`);
+  console.log(`Adding cookie header: X-Experiment-Name=${experimentLetter}`);
+  setCookie(response,`X-Experiment-Name=${experimentLetter}`);
 
   callback(null, response);
 };

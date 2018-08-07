@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "prettyjson": "^1.2.1",
+    "sharp": "^0.20.5"
+  }
+}

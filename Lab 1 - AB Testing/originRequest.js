@@ -1,12 +1,16 @@
 'use strict';
 
-/* This is an origin request function */
 exports.handler = (event, context, callback) => {
+  console.log('event', event);
+  
   const request = event.Records[0].cf.request;
   const headers = request.headers;
-  console.log('headers', headers);
   const cookies = cookiesToObject(headers.cookie);
-  console.log('cookies', cookies);
+  const experimentLetter = cookies['X-Experiment-Name'];
+  const experimentPaths = {
+    A: '/a-control.gif',
+    B: '/b-treatment.gif',
+  };
 
   if (request.uri !== '/experiment.gif') {
     // do not process if this is not an A-B test request
@@ -14,30 +18,7 @@ exports.handler = (event, context, callback) => {
     return;
   }
 
-  const pathExperimentA = '/a-control.gif';
-  const pathExperimentB = '/b-treatment.gif';
-
-  let experimentUri;
-  if (headers.cookie) {
-    if (cookies['X-Experiment-Name'] === 'A') {
-      console.log('Experiment A cookie found');
-      experimentUri = pathExperimentA;
-    } else if (cookies['X-Experiment-Name'] === 'B') {
-      console.log('Experiment B cookie found');
-      experimentUri = pathExperimentB;
-    }
-  }
-
-  if (!experimentUri) {
-    console.log('Experiment cookie not found. Throwing dice...');
-    if (Math.random() < 0.5) {
-      experimentUri = pathExperimentA;
-    } else {
-      experimentUri = pathExperimentB;
-    }
-  }
-
-  request.uri = experimentUri;
+  request.uri = experimentPaths[experimentLetter] || request.uri;
   console.log(`Request uri set to "${request.uri}"`);
   callback(null, request);
 };

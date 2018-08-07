@@ -1,5 +1,5 @@
 {
-  "name": "acg-ab-testing",
+  "name": "acg-lambda-edge",
   "version": "0.1.0",
   "private": true,
   "eslintConfig": {
@@ -26,7 +26,6 @@
       ]
     }
   },
-  "dependencies": {},
   "devDependencies": {
     "babel-eslint": "^8.2.6",
     "eslint": "^5.2.0",
