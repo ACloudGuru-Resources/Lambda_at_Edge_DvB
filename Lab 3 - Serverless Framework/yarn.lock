@@ -330,7 +330,7 @@ bl@^1.0.0:
     readable-stream "^2.3.5"
     safe-buffer "^5.1.1"
 
-bluebird@^3.5.0:
+bluebird@^3.5.0, bluebird@^3.5.1:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.1.tgz#d9551f9de98f1fcda1e683d17ee91a0602ee2eb9"
 
@@ -2389,6 +2389,12 @@ serverless-plugin-cloudfront-lambda-edge@^2.0.0:
   dependencies:
     class.extend "0.9.2"
     underscore "1.8.3"
+
+serverless-scriptable-plugin@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/serverless-scriptable-plugin/-/serverless-scriptable-plugin-0.8.0.tgz#020a8c7e4d95976b3c6c15d35b9ecc06adce4c41"
+  dependencies:
+    bluebird "^3.5.1"
 
 serverless@^1.29.2:
   version "1.29.2"

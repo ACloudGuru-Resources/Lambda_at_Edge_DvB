@@ -5,13 +5,9 @@ frameworkVersion: ">=1.9.0 <2.0.0"
 custom:
   stage: ${opt:stage, self:provider.stage}
   stackname: ${self:service}-${self:custom.stage}
-  stages:
-    dev: dev
-    prod: prod
-  stageFlag: ${self:custom.stages.${self:custom.stage}, "dev"}
   secrets: ${file(secrets.yml):secrets}
-  lambdaAtEdge:
-    retain: true
+  scriptHooks:
+    package:initialize: yarn build
 
 provider:
   name: aws
@@ -19,19 +15,6 @@ provider:
   runtime: nodejs8.10
 
 functions:
-  # viewerRequest:
-  #   name: ${self:custom.stackname}-viewerRequest
-  #   handler: functions/viewerRequest/viewerRequest.handler
-  #   memorySize: 128
-  #   timeout: 5
-  #   role: LambdaEdgeRole
-  #   lambdaAtEdge:
-  #     distribution: WebsiteDistribution
-  #     eventType: viewer-request
-  #     deletionPolicy: Retain
-  #   package:
-  #     include:
-  #       - functions/viewerRequest/**/*
   originResponse:
     name: ${self:custom.stackname}-originResponse
     handler: functions/originResponse/originResponse.handler
@@ -41,17 +24,14 @@ functions:
     lambdaAtEdge:
       distribution: WebsiteDistribution
       eventType: origin-response
-      deletionPolicy: Retain
     package:
       include:
         - functions/originResponse/**/*
 
 resources:
   Description: ACG Image Resizer
-  
   Resources:
     LambdaEdgeRole: ${file(resources/roles/lambdaedge-role.yml)}
-    
     CloudfrontOAI:
       Type: "AWS::CloudFront::CloudFrontOriginAccessIdentity"
       Properties:
@@ -61,7 +41,6 @@ resources:
       Type: "AWS::S3::Bucket"
       Properties:
         AccessControl: Private
-        # AccelerateConfiguration:
     BucketPolicy:
       Type: "AWS::S3::BucketPolicy"
       Properties:
@@ -115,11 +94,8 @@ resources:
             DefaultTTL: 0
             MaxTTL: 100
             MinTTL: 0
-            # PathPattern: String
             SmoothStreaming: false
             TargetOriginId: WebsiteBucketOrigin
-            # TrustedSigners:
-            #   - String
             ViewerProtocolPolicy: redirect-to-https
           Origins:
             - DomainName: {"Fn::GetAtt": [DefaultBucket, DomainName]}
@@ -129,6 +105,7 @@ resources:
 
 plugins:
   - serverless-plugin-cloudfront-lambda-edge
+  - serverless-scriptable-plugin
 
 package:
   individually: true
