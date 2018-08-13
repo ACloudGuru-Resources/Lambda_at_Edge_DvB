@@ -10,7 +10,7 @@ const prettyjson = require('prettyjson');
 // set the S3 and API GW endpoints
 const BUCKET = 'acg-image-resizer-dev-defaultbucket-9asofmuec79b';
 
-const URI_REGEX = /^\/(?:(.*\/)?)((?:[wh]_\d{2,4})(?:,[wh]_\d{2,4})*(?:,greyscale)?)\/((.*).(\w{3,4}))$/;
+const URI_REGEX = /^\/(?:(.*\/)?)((?:[wh]_\d{2,4})(?:,[wh]_\d{2,4})*)\/((.*).(\w{3,4}))$/;
 
 exports.handler = (event, context, callback) => {
   let response = event.Records[0].cf.response;
@@ -19,14 +19,13 @@ exports.handler = (event, context, callback) => {
 
   //check if image is not present
   if (response.status == 404) {
-    const path = request.uri, // Ex: uri /images/w_100,h_100,greyscale/image.jpg
+    const path = request.uri, // Ex: uri /images/w_100,h_100/image.jpg
       match = path.match(URI_REGEX), // /(.*)\/(\d+)x(\d+)\/(.*)\/(.*)/
       key = match[0].substring(1),
       prefix = match[1],
       transforms = match[2].split(','),
       width = parseInt(transforms[0].substring(2), 10),
       height = parseInt(transforms[1].substring(2), 10),
-      greyscale = transforms.indexOf('greyscale') >= 0,
       requiredFormat = match[5] == 'jpg' ? 'jpeg' : match[4],
       imageName = match[3],
       originalKey = prefix + imageName;
@@ -39,7 +38,6 @@ exports.handler = (event, context, callback) => {
         Sharp(data.Body)
           .resize(width, height)
           .toFormat(requiredFormat)
-          .greyscale(greyscale)
           .toBuffer(),
       )
       .then(buffer => {
