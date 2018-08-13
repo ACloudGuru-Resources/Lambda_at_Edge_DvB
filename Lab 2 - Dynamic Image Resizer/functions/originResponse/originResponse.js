@@ -7,12 +7,17 @@ const S3 = new AWS.S3({
 const Sharp = require('sharp');
 const prettyjson = require('prettyjson');
 
-// set the S3 and API GW endpoints
-const BUCKET = 'acg-image-resizer-dev-defaultbucket-9asofmuec79b';
-
 const URI_REGEX = /^\/(?:(.*\/)?)((?:[wh]_\d{2,4})(?:,[wh]_\d{2,4})*)\/((.*).(\w{3,4}))$/;
 
 exports.handler = (event, context, callback) => {
+
+  // Set this to your bucket name if it does not auto-resolve
+  // context.functionName = dvb-image-resizer-originResponse
+  // bucketname = dvb-image-resizer-bucket
+  const BUCKET = context.functionName.replace('-originResponse', '-bucket');
+  console.log('context.functionName', context.functionName);
+  console.log('BUCKET', BUCKET);
+
   let response = event.Records[0].cf.response;
   let request = event.Records[0].cf.request;
   console.log(prettyjson.render(event, { noColor: true }));

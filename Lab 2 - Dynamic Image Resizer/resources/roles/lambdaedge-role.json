@@ -19,8 +19,8 @@
           "s3:PutObject"
         ],
         "Resource": [
-          "arn:aws:s3:::dvb-ab-testing-bucket",
-          "arn:aws:s3:::dvb-ab-testing-bucket/*"
+          "arn:aws:s3:::dvb-image-resizer-bucket",
+          "arn:aws:s3:::dvb-image-resizer-bucket/*"
         ]
       }
   ]
