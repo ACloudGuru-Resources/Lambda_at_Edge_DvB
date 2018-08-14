@@ -3,7 +3,7 @@
 const experimentTraffic = 0.5;
 
 exports.handler = (event, context, callback) => {
-  console.log('event', event);
+  console.log('event', JSON.stringify(event));
   const request = event.Records[0].cf.request;
   const headers = request.headers;
   const cookies = cookiesToObject(headers.cookie);

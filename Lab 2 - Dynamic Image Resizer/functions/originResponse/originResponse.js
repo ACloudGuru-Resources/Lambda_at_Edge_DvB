@@ -10,11 +10,12 @@ const prettyjson = require('prettyjson');
 const URI_REGEX = /^\/(?:(.*\/)?)((?:[wh]_\d{2,4})(?:,[wh]_\d{2,4})*)\/((.*).(\w{3,4}))$/;
 
 exports.handler = (event, context, callback) => {
-
   // Set this to your bucket name if it does not auto-resolve
   // context.functionName = dvb-image-resizer-originResponse
   // bucketname = dvb-image-resizer-bucket
-  const BUCKET = context.functionName.replace('-originResponse', '-bucket');
+  const BUCKET = context.functionName
+    .replace('-originResponse', '-bucket')
+    .replace('us-east-1.', '');
   console.log('context.functionName', context.functionName);
   console.log('BUCKET', BUCKET);
 

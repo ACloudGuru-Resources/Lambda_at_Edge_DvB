@@ -1,0 +1,90 @@
+{
+  "Records": [
+      {
+          "cf": {
+              "request": {
+                  "clientIp": "555.555.555.555",
+                  "headers": {
+                      "accept-encoding": [
+                          {
+                              "key": "Accept-Encoding",
+                              "value": "gzip"
+                          }
+                      ],
+                      "cache-control": [
+                          {
+                              "key": "Cache-Control",
+                              "value": "no-cache"
+                          }
+                      ],
+                      "cookie": [
+                          {
+                              "key": "Cookie",
+                              "value": "X-Experiment-Name=B"
+                          }
+                      ],
+                      "host": [
+                          {
+                              "key": "Host",
+                              "value": "dvb-ab-testing-bucket.s3.amazonaws.com"
+                          }
+                      ],
+                      "pragma": [
+                          {
+                              "key": "Pragma",
+                              "value": "no-cache"
+                          }
+                      ],
+                      "user-agent": [
+                          {
+                              "key": "User-Agent",
+                              "value": "Amazon CloudFront"
+                          }
+                      ]
+                  },
+                  "method": "GET",
+                  "origin": {
+                      "s3": {
+                          "authMethod": "none",
+                          "customHeaders": {},
+                          "domainName": "dvb-ab-testing-bucket.s3.amazonaws.com",
+                          "path": ""
+                      }
+                  },
+                  "querystring": "",
+                  "uri": "/experiment.gif"
+              },
+              "response": {
+                  "headers": {
+                      "accept-ranges": [
+                          {
+                              "key": "Accept-Ranges",
+                              "value": "bytes"
+                          }
+                      ],
+                      "content-length": [
+                          {
+                              "key": "Content-Length",
+                              "value": "5801"
+                          }
+                      ],
+                      "content-type": [
+                          {
+                              "key": "Content-Type",
+                              "value": "image/gif"
+                          }
+                      ],
+                      "server": [
+                          {
+                              "key": "Server",
+                              "value": "AmazonS3"
+                          }
+                      ]
+                  },
+                  "status": "200",
+                  "statusDescription": "OK"
+              }
+          }
+      }
+  ]
+}
