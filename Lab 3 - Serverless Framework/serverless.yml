@@ -6,6 +6,9 @@ custom:
   stage: ${opt:stage, self:provider.stage}
   stackname: ${self:service}-${self:custom.stage}
   secrets: ${file(secrets.yml):secrets}
+  s3Sync:
+    - bucketName: ${self:custom.stackname}-bucket
+      localDir: public
   scriptHooks:
     package:initialize: yarn build
 
@@ -107,6 +110,7 @@ resources:
 plugins:
   - serverless-plugin-cloudfront-lambda-edge
   - serverless-scriptable-plugin
+  - serverless-s3-sync
 
 package:
   individually: true
