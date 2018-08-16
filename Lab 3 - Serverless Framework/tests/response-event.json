@@ -1,56 +1,72 @@
 {
   "Records": [
-      {
-          "cf": {
-              "config": {
-                  "distributionDomainName": "d123.cloudfront.net",
-                  "distributionId": "EDFDVBD6EXAMPLE",
-                  "eventType": "viewer-response",
-                  "requestId": "xGN7KWpVEmB9Dp7ctcVFQC4E-nrcOcEKS3QyAez--06dV7TEXAMPLE=="
-              },
-              "request": {
-                  "clientIp": "2001:0db8:85a3:0:0:8a2e:0370:7334",
-                  "method": "GET",
-                  "uri": "/picture.jpg",
-                  "querystring": "size=large",
-                  "headers": {
-                      "host": [
-                          {
-                              "key": "Host",
-                              "value": "d111111abcdef8.cloudfront.net"
-                          }
-                      ],
-                      "user-agent": [
-                          {
-                              "key": "User-Agent",
-                              "value": "curl/7.18.1"
-                          }
-                      ]
-                  }
-              },
-              "response": {
-                  "status": "200",
-                  "statusDescription": "OK",
-                  "headers": {
-                      "server": [
-                          {
-                              "key": "Server",
-                              "value": "MyCustomOrigin"
-                          }
-                      ],
-                      "set-cookie": [
-                          {
-                              "key": "Set-Cookie",
-                              "value": "theme=light"
-                          },
-                          {
-                              "key": "Set-Cookie",
-                              "value": "sessionToken=abc123; Expires=Wed, 09 Jun 2021 10:18:14 GMT"
-                          }
-                      ]
-                  }
+    {
+      "cf": {
+        "config": {
+          "distributionDomainName": "YOUR_DISTRO_HERE.cloudfront.net",
+          "distributionId": "YOUR_DISTRO_ID_HERE",
+          "eventType": "origin-response"
+        },
+        "request": {
+          "clientIp": "999.999.999.999",
+          "headers": {
+            "accept-encoding": [
+              {
+                "key": "Accept-Encoding",
+                "value": "gzip"
               }
+            ],
+            "host": [
+              {
+                "key": "Host",
+                "value": "acg-image-resizer-sls-dev-bucket.s3.amazonaws.com"
+              }
+            ]
+          },
+          "method": "GET",
+          "origin": {
+            "s3": {
+              "authMethod": "origin-access-identity",
+              "customHeaders": null,
+              "domainName": "acg-image-resizer-sls-dev-bucket.s3.amazonaws.com",
+              "path": null,
+              "region": "us-east-1"
+            }
+          },
+          "querystring": null,
+          "uri": "/images/w_100,h_100/lake.jpg"
+        },
+        "response": {
+            "headers": {
+              "content-type": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/xml"
+                }
+              ],
+              "date": [
+                {
+                  "key": "Date",
+                  "value": "Thu, 16 Aug 2018 19:13:46 GMT"
+                }
+              ],
+              "server": [
+                {
+                  "key": "Server",
+                  "value": "AmazonS3"
+                }
+              ],
+              "transfer-encoding": [
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                }
+              ]
+            },
+            "status": 404,
+            "statusDescription": "Not Found"
           }
       }
+    }
   ]
 }
