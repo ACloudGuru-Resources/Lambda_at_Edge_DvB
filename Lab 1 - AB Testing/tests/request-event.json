@@ -53,36 +53,6 @@
                   },
                   "querystring": "",
                   "uri": "/experiment.gif"
-              },
-              "response": {
-                  "headers": {
-                      "accept-ranges": [
-                          {
-                              "key": "Accept-Ranges",
-                              "value": "bytes"
-                          }
-                      ],
-                      "content-length": [
-                          {
-                              "key": "Content-Length",
-                              "value": "5801"
-                          }
-                      ],
-                      "content-type": [
-                          {
-                              "key": "Content-Type",
-                              "value": "image/gif"
-                          }
-                      ],
-                      "server": [
-                          {
-                              "key": "Server",
-                              "value": "AmazonS3"
-                          }
-                      ]
-                  },
-                  "status": "200",
-                  "statusDescription": "OK"
               }
           }
       }
