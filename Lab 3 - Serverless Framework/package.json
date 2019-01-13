@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "sh ./scripts/build_modules.sh"
+    "build": "sh ./scripts/build_modules.sh",
+    "build-windows": "./scripts/build_modules.bat"
   },
   "eslintConfig": {
     "env": {
